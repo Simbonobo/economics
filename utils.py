@@ -2,6 +2,7 @@ import os
 import warnings
 
 import pandas as pd
+from sec_edgar_downloader import Downloader
 
 warnings.filterwarnings("ignore")
 
