@@ -2,7 +2,8 @@ import os
 import warnings
 
 import pandas as pd
-from sec_edgar_downloader import Downloader
+
+from datetime import datetime
 
 warnings.filterwarnings("ignore")
 
@@ -39,7 +40,7 @@ def read_csv(path=_get_data_path(), years=None):
         file_path = os.path.join(path, file)
         _ = pd.read_csv(file_path, index_col=0)
         _.rename(columns={_.columns[-2]: "PRICE VAR [%]"}, inplace=True)
-        _["Year"] = year
+        _["Year"] = datetime.strptime(year, '%Y')
         if year is years[0]:
             df = _
         else:
