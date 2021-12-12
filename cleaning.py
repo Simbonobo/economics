@@ -1,12 +1,20 @@
-def remove_highly_correlated_features(df, n=5):
+def remove_highly_correlated_features(df, bound=0.9):
+    print("Removing features with a correlation of ", bound, " or greater.")
     nans = df.isnull().sum(axis=0)
-    correlations = _get_top_abs_correlations(df=df, n=n)
-    for firstColumn, secondColumn in correlations.index:
-        if firstColumn in df.columns & secondColumn in df.columns:
+    correlations = _get_top_abs_correlations(df=df)
+    for index, value in correlations.items():
+        firstColumn = index[0]
+        secondColumn = index[1]
+        if value < bound:
+            break
+        if (firstColumn in df.columns) & (secondColumn in df.columns):
             if nans[firstColumn] > nans[secondColumn]:
                 df.drop(columns=firstColumn, inplace=True)
+                print("Dropped: ", firstColumn)
             else:
                 df.drop(columns=secondColumn, inplace=True)
+                print("Dropped: ", secondColumn)
+    return df
 
 
 def _get_redundant_pairs(df):
@@ -19,8 +27,8 @@ def _get_redundant_pairs(df):
     return pairs_to_drop
 
 
-def _get_top_abs_correlations(df, n):
+def _get_top_abs_correlations(df):
     au_corr = df.corr().abs().unstack()
     labels_to_drop = _get_redundant_pairs(df)
     au_corr = au_corr.drop(labels=labels_to_drop).sort_values(ascending=False)
-    return au_corr[0:n]
+    return au_corr
