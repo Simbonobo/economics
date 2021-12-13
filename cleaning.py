@@ -1,7 +1,7 @@
 def remove_highly_correlated_features(df, bound=0.9):
     print("Removing features with a correlation of", bound, "or greater.")
     nans = df.isnull().sum(axis=0)
-    correlations = _get_top_abs_correlations(df=df)
+    correlations = _get_top_abs_correlations(df=df.select_dtypes(include="number"))
     for index, value in correlations.items():
         firstColumn = index[0]
         secondColumn = index[1]

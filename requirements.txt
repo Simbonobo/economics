@@ -4,5 +4,6 @@ numpy
 jupyter
 sklearn
 matplotlib
+seaborn
 
 ###### Requirements with Version Specifiers ######`
