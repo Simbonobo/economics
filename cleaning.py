@@ -1,5 +1,5 @@
 def remove_highly_correlated_features(df, bound=0.9):
-    print("Removing features with a correlation of ", bound, " or greater.")
+    print("Removing features with a correlation of", bound, "or greater.")
     nans = df.isnull().sum(axis=0)
     correlations = _get_top_abs_correlations(df=df)
     for index, value in correlations.items():
@@ -10,10 +10,10 @@ def remove_highly_correlated_features(df, bound=0.9):
         if (firstColumn in df.columns) & (secondColumn in df.columns):
             if nans[firstColumn] > nans[secondColumn]:
                 df.drop(columns=firstColumn, inplace=True)
-                print("Dropped: ", firstColumn)
+                print("Dropped:", firstColumn)
             else:
                 df.drop(columns=secondColumn, inplace=True)
-                print("Dropped: ", secondColumn)
+                print("Dropped:", secondColumn)
     return df
 
 

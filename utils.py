@@ -40,7 +40,7 @@ def read_csv(path=_get_data_path(), years=None):
         file_path = os.path.join(path, file)
         _ = pd.read_csv(file_path, index_col=0)
         _.rename(columns={_.columns[-2]: "PRICE VAR [%]"}, inplace=True)
-        _["Year"] = datetime.strptime(year, '%Y')
+        _["Year"] = datetime.strptime(year, '%Y').year
         if year is years[0]:
             df = _
         else:
