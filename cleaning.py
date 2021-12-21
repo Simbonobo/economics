@@ -32,3 +32,19 @@ def _get_top_abs_correlations(df):
     labels_to_drop = _get_redundant_pairs(df)
     au_corr = au_corr.drop(labels=labels_to_drop).sort_values(ascending=False)
     return au_corr
+
+
+def fill_na(df, byColumn):
+    numberOfNans = df.isnull().sum(axis=1).sum()
+    _ = df.groupby(byColumn, observed=True).apply(
+        lambda group: group.select_dtypes(include="number").interpolate(method="index", limit_direction="both"))
+    print("Filled", numberOfNans - _.isnull().sum(axis=1).sum(), "NaN-entries")
+    return _.join(df.select_dtypes(include="category"), how="outer")
+
+
+def drop_na_rows(df, perc=10.0):
+    numberRows = df.shape[0]
+    min_count = int(((100 - perc) / 100) * df.shape[1] + 1)
+    df = df.dropna(axis=0, thresh=min_count)
+    print("Dropped", numberRows - df.shape[0], "rows containing either", perc, "% or more than", perc, "% NaN-values")
+    return df
