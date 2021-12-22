@@ -49,7 +49,7 @@ def read_csv(path=_get_data_path(), years=None):
     df.rename(columns={"index": "Stock"}, inplace=True)
     df.sort_values(by=["Stock", "Year"], inplace=True)
 
-    return df
+    return df.reset_index(drop=True)
 
 
 def write_csv(df, filename, path=_get_data_path()):

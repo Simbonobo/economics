@@ -60,15 +60,15 @@ def drop_na_rows(df, perc=10.0):
 
 
 def remove_outliers(
-    df,
-    density_sensitive_cols=[],
-    excluded_cols=None,
-    n_bins=10,
-    zscore_threshold=2.5,
-    verbose=False,
-    contamination=0.1,
-    tol=0.5,
-    alpha=0.1,
+        df,
+        density_sensitive_cols=None,
+        excluded_cols=None,
+        n_bins=10,
+        zscore_threshold=2.5,
+        verbose=False,
+        contamination=0.1,
+        tol=0.5,
+        alpha=0.1,
 ):
     """
     This functions removes outliers by applying two different algorithms on specific columns:
@@ -88,6 +88,8 @@ def remove_outliers(
     :returns
         pd.DataFrame: Processed DataFrame.
     """
+    if density_sensitive_cols is None:
+        density_sensitive_cols = []
     if n_bins == "auto":
         n_bins = int(
             1 + 3.322 * np.log(df.shape[0])
@@ -128,3 +130,15 @@ def remove_outliers(
     print(f"Outlier detection completed. Number of removed outlier: {outlier_count}")
 
     return df.reset_index(drop=True)
+
+
+def remove_inorganic_stocks(df, gain=500):
+    df_ = df.loc[:, ['Stock', 'Sector', 'PRICE VAR [%]']]
+    top_gainers = df_[df_['PRICE VAR [%]'] >= gain]
+    top_gainers.set_index("Stock", inplace=True)
+    print(f'{len(top_gainers)} STOCKS with more than {gain}% gain.')
+    tickers = top_gainers.index.values.tolist()
+    _ = df.shape[0]
+    df = df[df.Stock.isin(tickers) == False]
+    print("Removed", _ - df.shape[0], "entries.")
+    return df
