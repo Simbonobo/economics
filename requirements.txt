@@ -5,5 +5,7 @@ jupyter
 sklearn
 matplotlib
 seaborn
+scipy
+pyod
 
 ###### Requirements with Version Specifiers ######`
