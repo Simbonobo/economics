@@ -17,3 +17,10 @@ def plot_price_variation_per_sector(df):
         plt.plot(temp['Stock'], temp['PRICE VAR [%]'])
         plt.title(sector.upper(), fontsize=20)
         plt.show()
+
+
+def plot_correlation_matrix(df):
+    corrMatrix = df.corr()
+    fig, ax = plt.subplots(figsize=(30, 30))
+    sns.heatmap(corrMatrix, annot=False, cmap='YlGnBu', vmin=-1, vmax=1, center=0, ax=ax)
+    plt.show()
