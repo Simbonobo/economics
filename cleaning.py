@@ -1,8 +1,11 @@
 import warnings
 
 import numpy as np
+import pandas as pd
+
 from scipy.stats import zscore
 from pyod.models.hbos import HBOS
+from sklearn import preprocessing
 
 warnings.filterwarnings("ignore")
 
@@ -47,15 +50,21 @@ def fill_na(df, byColumn):
     numberOfNans = df.isnull().sum(axis=1).sum()
     _ = df.groupby(byColumn, observed=True).apply(
         lambda group: group.select_dtypes(include="number").interpolate(method="index", limit_direction="both"))
-    print("Filled", numberOfNans - _.isnull().sum(axis=1).sum(), "NaN-entries")
-    return _.join(df.select_dtypes(include="category"), how="outer")
+    print(f"Filled {numberOfNans - _.isnull().sum(axis=1).sum()}/{numberOfNans} NaN-entries by grouping the {byColumn} "
+          f"column.")
+    _ = _.join(df.select_dtypes(include="category"), how="outer")
+    # Sort columns
+    cols = _.columns.tolist()
+    cols = ["Stock", "Year", "Sector"] + cols[:-4] + ["Class"]
+    _ = _[cols]
+    return _
 
 
 def drop_na_rows(df, perc=10.0):
     numberRows = df.shape[0]
     min_count = int(((100 - perc) / 100) * df.shape[1] + 1)
     df = df.dropna(axis=0, thresh=min_count)
-    print("Dropped", numberRows - df.shape[0], "rows containing either", perc, "% or more than", perc, "% NaN-values")
+    print("Dropped", numberRows - df.shape[0], "rows containing either", perc, "% or more than", perc, "% NaN-values.")
     return df
 
 
@@ -94,21 +103,22 @@ def remove_outliers(
         n_bins = int(
             1 + 3.322 * np.log(df.shape[0])
         )  # Sturge’s Rule for detecting bin numbers automatically
-    print("n_bins", n_bins)
     outlier_count = 0
     df_numeric_view = df.select_dtypes(include="number")
 
     for col in df_numeric_view.columns:
         if excluded_cols and col in excluded_cols:
             continue
+        df_numeric_view[col] = (df_numeric_view[col] - df_numeric_view[col].min()) / \
+                               (df_numeric_view[col].max() - df_numeric_view[col].min())
         if col in density_sensitive_cols:
-            df[f"{col}_zscore"] = np.around(np.abs(zscore(df[col])), decimals=1)
+            df[f"{col}_zscore"] = np.around(np.abs(zscore(df_numeric_view[col], nan_policy='omit')), decimals=1)
             outlier = df[df[f"{col}_zscore"] > zscore_threshold]
             outlier_count += outlier.shape[0]
             df.drop(outlier.index, inplace=True)
             if verbose:
                 print(
-                    f"--> {outlier.shape[0]} outlier detected and removed from {col} column using zscore"
+                    f"--> {outlier.shape[0]} outlier detected and removed from {col} column using zscore."
                 )
             continue
         hbos = HBOS(alpha=alpha, contamination=contamination, n_bins=n_bins, tol=tol)
@@ -119,7 +129,7 @@ def remove_outliers(
         df.drop(outlier.index, inplace=True)
         if verbose:
             print(
-                f"--> {outlier.shape[0]} outlier detected and removed from {col} column using HBOS algorithm"
+                f"--> {outlier.shape[0]} outlier detected and removed from {col} column using HBOS algorithm."
             )
 
     outlier_score_cols_mask = (df.columns.str.contains("anamoly_score")) | (
