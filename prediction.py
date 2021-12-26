@@ -12,6 +12,7 @@ def split_data_sets_for_svm(df, test_size=0.2):
            df (pandas.DataFrame): The given data set.
            test_size (float): Defines the size of the test set. Default is 0.2.
     """
+    df = df.sample(frac=1, random_state=42).reset_index(drop=True)
     train_index = int(len(df) * (1 - test_size))
     df_train = df[0:train_index]
     df_test = df[train_index:]
@@ -40,7 +41,7 @@ def make_pipeline_for_svm(cat_vars, cont_vars, model):
     )
     svc_model = model
     svc_pipeline = Pipeline(
-        steps=[("preprocessor", svc_preprocessor), ("svr model", svc_model)]
+        steps=[("preprocessor", svc_preprocessor), ("svc model", svc_model)]
     )
     return svc_pipeline
 
