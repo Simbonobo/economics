@@ -47,7 +47,7 @@ def make_pipeline_for_svm(cat_vars, cont_vars, model):
 
 
 def find_best_parameters_for_model(
-    pipeline, X_train, y_train, model_params, scoring, n_iter, verbose=True
+    pipeline, X_train, y_train, model_params, scoring, n_iter, n_splits, n_repeats, verbose=True
 ):
     """
     This function performs a randomized grid search with five time series splits on the training set.
@@ -67,7 +67,7 @@ def find_best_parameters_for_model(
         param_distributions=model_params,
         n_jobs=1,
         n_iter=n_iter,
-        cv=RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42),
+        cv=RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=42),
         scoring=scoring,
         random_state=42,
         verbose=verbose,
