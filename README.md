@@ -1,10 +1,10 @@
 # Seminar Statistics and Econometrics 2021/22
 
-This project provides analysis of taxi demand patterns in the City of Chicago in 2015 to provide valuable information for the market entry of an all electric ridehailing service of an german car manufacturer. 
+This project provides an implementation of a Support Vector Machine on an U.S. stock market data set from 2014-2018.
 
 ## Setup
 
-I recommend to setup a virtual environment or conda environment with python version 3.8 and using the provided requirements.txt to install all necessary packages.
+I recommend to setup a virtual environment or conda environment with python version 3.9 and using the provided requirements.txt to install all necessary packages.
 
 Download Data:
 
