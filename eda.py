@@ -19,8 +19,10 @@ def plot_price_variation_per_sector(df):
         plt.show()
 
 
-def plot_correlation_matrix(df):
+def plot_correlation_matrix(df, title):
     corrMatrix = df.corr()
     fig, ax = plt.subplots(figsize=(20, 15))
     sns.heatmap(corrMatrix, annot=False, cmap='YlGnBu', vmin=-1, vmax=1, center=0, ax=ax)
+#    plt.title(title, fontsize=20)
+    fig.savefig(f"{title}.png", bbox_inches="tight")
     plt.show()
