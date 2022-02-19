@@ -13,4 +13,4 @@ I recommend to setup a virtual environment or conda environment with python vers
 * **[Cleaning](notebooks/Cleaning.ipynb):** Data set exploration and removal of invalid data as well as outliers and highly correlated features. 
 * **[Prediction](notebooks/Prediction.ipynb):** Predciting stocks as valuable and valueless.
 
-![Dow Jones 2010-2022](https://github.com/Simbonobo/economics/blob/main/image.jpg?raw=true)
+![Dow Jones 2010-2022](https://github.com/Simbonobo/economics/blob/main/dow-jones-industrial-average-last-10-years-2022-02-07-macrotrends.png?raw=true)
