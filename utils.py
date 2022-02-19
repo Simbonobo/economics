@@ -29,7 +29,7 @@ def _get_data_path():
 
 def read_csv(path=_get_data_path(), years=None):
     if years is None:
-        file = "Cleaned_Financial_Data2.csv"
+        file = "Cleaned_Financial_Data.csv"
         file_path = os.path.join(path, file)
         df = pd.read_csv(file_path, index_col=0)
 
