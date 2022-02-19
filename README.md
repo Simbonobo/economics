@@ -55,6 +55,3 @@ Predicting taxi demand in diffrent spatia-temporal resolutions using two diffren
 * **[optimization](notebooks/optimization.ipynb):** Formulation and solving of an mathematical optimization problem to allocate the optimal locations for charging stations in chicago.
 
  *Require dataset [Cleaned Chicago](https://filedn.eu/lvIIS1QB2KmSUjz5Gvx9LYb/Taxi_Trips_Cleaned.parquet)*
-
-
-![Anacondas](https://miro.medium.com/max/1000/1*h1h6j08kIHv3ywN3MCfKLg.jpeg)
